@@ -1,6 +1,6 @@
+from db.connection import init_db
+from services.budget import created_budget
+
 def main():
-    print("Hello from rachu-ciachu!")
-
-
-if __name__ == "__main__":
-    main()
+    init_db()
+    print("Budżet rachu-ciach")
