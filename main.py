@@ -33,5 +33,13 @@ def main():
         init_db()
         print("Database initialized")
 
+    elif args.command == "create_budget":
+        budget_id = create_budget(args.name)
+        print(f"Budget '{args.name}' created with id={budget_id}")
+
+    elif args.command == "add-category":
+        category_id = add_category(args.name)
+        print(f"Category '{args.name}' created with id={category_id}")
+
 if __name__ == "__main__":
     main()
