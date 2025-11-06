@@ -8,12 +8,24 @@ def get_conn():
 
 def init_db():
     schema = """
+    DROP TABLE IF EXISTS budget;
+    DROP TABLE IF EXISTS income_plan;
+    DROP TABLE IF EXISTS spend_plan;
+    DROP TABLE IF EXISTS savings_plan;
+    DROP TABLE IF EXISTS real_income;
+    DROP TABLE IF EXISTS real_spend;
+    DROP TABLE IF EXISTS real_savings;
+    DROP TABLE IF EXISTS category;
+    DROP TABLE IF EXISTS goal;
+    DROP TABLE IF EXISTS income_type;
+
+
     PRAGMA foreign_keys=ON;
 
     CREATE TABLE IF NOT EXISTS budget(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
-        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+        created_at TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS category(
@@ -26,7 +38,7 @@ def init_db():
         name TEXT NOT NULL UNIQUE
     );
 
-    CREATE TABLE IF NOT EXISTS type(
+    CREATE TABLE IF NOT EXISTS income_type(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE
     );
