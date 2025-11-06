@@ -23,28 +23,28 @@ def init_db():
     PRAGMA foreign_keys=ON;
 
     CREATE TABLE IF NOT EXISTS budget(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
         created_at TEXT NOT NULL
     );
 
     CREATE TABLE IF NOT EXISTS category(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE
     );
 
     CREATE TABLE IF NOT EXISTS goal(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE
     );
 
     CREATE TABLE IF NOT EXISTS income_type(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE
     );
 
     CREATE TABLE IF NOT EXISTS income_plan(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         type_id INT NOT NULL,
         amount REAL NOT NULL,
@@ -53,7 +53,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS spend_plan(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         category_id INT NOT NULL,
         amount REAL NOT NULL,
@@ -62,7 +62,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS savings_plan(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         goal_id INT NOT NULL,
         amount REAL NOT NULL,
@@ -71,7 +71,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS real_income(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         type_id INT NOT NULL,
         amount REAL NOT NULL,
@@ -80,7 +80,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS real_spend(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         category_id INT NOT NULL,
         amount REAL NOT NULL,
@@ -89,7 +89,7 @@ def init_db():
     );
 
     CREATE TABLE IF NOT EXISTS real_savings(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY,
         budget_id INT NOT NULL,
         goal_id INT NOT NULL,
         amount REAL NOT NULL,
