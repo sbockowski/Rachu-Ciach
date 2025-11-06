@@ -1,6 +1,6 @@
 import argparse
 from db.connection import init_db
-from services.budget import create_budget
+from services.budget import create_budget, add_category
 
 def main():
     # init_db()
@@ -33,7 +33,7 @@ def main():
         init_db()
         print("Database initialized")
 
-    elif args.command == "create_budget":
+    elif args.command == "create-budget":
         budget_id = create_budget(args.name)
         print(f"Budget '{args.name}' created with id={budget_id}")
 
