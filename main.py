@@ -15,7 +15,7 @@ def main():
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # init db
-    parser_init = subparsers.add_parser("init-db", help="Create all tables")
+    subparsers.add_parser("init-db", help="Create all tables")
     
     # create-budget
     parser_create_budget = subparsers.add_parser("create-budget", help="Create a new budget")

@@ -49,7 +49,7 @@ def init_db():
         type_id INT NOT NULL,
         amount REAL NOT NULL,
         FOREIGN KEY (budget_id) REFERENCES budget(id),
-        FOREIGN KEY (type_id) REFERENCES type(id)
+        FOREIGN KEY (type_id) REFERENCES income_type(id)
     );
 
     CREATE TABLE IF NOT EXISTS spend_plan(
