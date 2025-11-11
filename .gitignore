@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv*/
+
+# databases
+*.db
+rachu-ciach.db
+
+# lock files
+# uv.lock
