@@ -4,28 +4,36 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent.parent / "rachu-ciach.db"
 
 def get_conn():
-    return sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("PRAGMA foreign_keys = ON;")
+    conn.row_factory = sqlite3.Row
+    return conn
 
-def init_db():
-    schema = """
-    DROP TABLE IF EXISTS budget;
-    DROP TABLE IF EXISTS income_plan;
-    DROP TABLE IF EXISTS spend_plan;
-    DROP TABLE IF EXISTS savings_plan;
-    DROP TABLE IF EXISTS real_income;
-    DROP TABLE IF EXISTS real_spend;
-    DROP TABLE IF EXISTS real_savings;
-    DROP TABLE IF EXISTS category;
-    DROP TABLE IF EXISTS goal;
-    DROP TABLE IF EXISTS income_type;
+def init_db(reset: bool = False) -> str:
 
+    schema_prefix = ""
+    if reset:
+        schema_prefix = """
+        DROP TABLE IF EXISTS real_savings;
+        DROP TABLE IF EXISTS real_spend;
+        DROP TABLE IF EXISTS real_income;
+        DROP TABLE IF EXISTS savings_plan;
+        DROP TABLE IF EXISTS spend_plan;
+        DROP TABLE IF EXISTS income_plan;
+        DROP TABLE IF EXISTS goal;
+        DROP TABLE IF EXISTS category;
+        DROP TABLE IF EXISTS income_type;
+        DROP TABLE IF EXISTS budget;
+        """
 
-    PRAGMA foreign_keys=ON;
+    schema = f"""
+    PRAGMA foreign_keys = ON;
+    {schema_prefix}
 
     CREATE TABLE IF NOT EXISTS budget(
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
-        created_at TEXT NOT NULL
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
     CREATE TABLE IF NOT EXISTS category(
@@ -33,12 +41,12 @@ def init_db():
         name TEXT NOT NULL UNIQUE
     );
 
-    CREATE TABLE IF NOT EXISTS goal(
+    CREATE TABLE IF NOT EXISTS income_type(
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE
     );
 
-    CREATE TABLE IF NOT EXISTS income_type(
+    CREATE TABLE IF NOT EXISTS goal(
         id INTEGER PRIMARY KEY,
         name TEXT NOT NULL UNIQUE
     );
@@ -76,7 +84,7 @@ def init_db():
         type_id INT NOT NULL,
         amount REAL NOT NULL,
         FOREIGN KEY (budget_id) REFERENCES budget(id),
-        FOREIGN KEY (type_id) REFERENCES type(id)
+        FOREIGN KEY (type_id) REFERENCES income_type(id)
     );
 
     CREATE TABLE IF NOT EXISTS real_spend(
@@ -101,3 +109,5 @@ def init_db():
     with get_conn() as conn:
         conn.executescript(schema)
         conn.commit()
+
+    return "⚠️ Database reset and initialized." if reset else "✅ Database initialized."
