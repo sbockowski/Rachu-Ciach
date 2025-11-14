@@ -14,7 +14,6 @@ class Budget(Base):
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
     created_at: Mapped[str] = mapped_column(String, nullable=False)
 
-    # relacje: lista planów wydatków / przychodów / realnych wpisów
     spend_plans: Mapped[List["SpendPlan"]] = relationship(
         "SpendPlan", back_populates="budget", cascade="all, delete-orphan"
     )
