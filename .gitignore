@@ -7,6 +7,7 @@ __pycache__/
 # databases
 *.db
 rachu-ciach.db
+db/rachu-ciach.db
 
 # lock files
 # uv.lock

@@ -3,11 +3,6 @@ from db.connection import init_db
 from services.budget import *
 
 def main():
-    # init_db()
-    # print("Budżet rachu-ciach!")
-    # budget_name = input("Podaj nazwę budżetu: ")
-    # budget_id = create_budget(budget_name)
-    # print(f"Utworzono budżet id={budget_id},name={budget_name}")
 
     parser = argparse.ArgumentParser(
         description="Rachu Ciach - Budget manager CLI"
@@ -16,6 +11,10 @@ def main():
 
     # init db
     subparsers.add_parser("init-db", help="Create all tables")
+
+    # reset db
+    parser_reset = subparsers.add_parser("reset-db", help="Reset DB (delete and create database)")
+    parser_reset.add_argument("--yes", action="store_true", help="Confirm without prompt")
     
     # create-budget
     parser_create_budget = subparsers.add_parser("create-budget", help="Create a new budget")
@@ -56,8 +55,16 @@ def main():
 
     # dispatcher
     if args.command == "init-db":
-        init_db()
-        print("Database initialized")
+        print(init_db(reset=False))
+    elif args.command == "reset-db":
+        if getattr(args, "yes", False):
+            print(init_db(reset=True))
+        else:
+            confirm = input("⚠️ This function will delete all data. Enter 'yes' to confirm: ")
+            if confirm.strip().lower() == "tak":
+                print(init_db(reset=True))
+            else:
+                print("Database reset cancelled.")
 
     elif args.command == "create-budget":
         budget_id = create_budget(args.name)
