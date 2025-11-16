@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import relationship, mapped_column, Mapped
+from .base import Base
 
 class Budget(Base):
     __tablename__ = "budget"
