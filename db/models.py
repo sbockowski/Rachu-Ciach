@@ -2,7 +2,7 @@
 from __future__ import annotations
 from typing import List
 from sqlalchemy import Integer, String, Float, ForeignKey
-from sqlalchemy.orm import relationship, mapped_column, Mapped, DeclarativeBase
+from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 class Base(DeclarativeBase):
     pass
