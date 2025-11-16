@@ -23,9 +23,9 @@ def main():
     parser_add_category = subparsers.add_parser("add-category", help="Add a new category")
     parser_add_category.add_argument("name", type=str, help="Category name")
 
-    # add-income-type
-    parser_add_income_type = subparsers.add_parser("add-income-type", help="Add a new income type")
-    parser_add_income_type.add_argument("name", type=str, help="Income type name")
+    # add-kind
+    parser_add_kind = subparsers.add_parser("add-kind", help="Add a new income kind")
+    parser_add_kind.add_argument("name", type=str, help="Income kind name")
 
     # add-goal
     parser_add_goal = subparsers.add_parser("add-goal", help="Add a new goal")
