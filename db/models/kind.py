@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import List
-from .base import Base
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import relationship, mapped_column, Mapped
+from .base import Base
 
 class Kind(Base):
     __tablename__ = "kind"

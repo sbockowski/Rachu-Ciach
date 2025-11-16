@@ -1,8 +1,9 @@
 from __future__ import annotations
 from typing import List
-from .base import Base
 from sqlalchemy import Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship, mapped_column, Mapped
+from .base import Base
+
 
 class SpendPlan(Base):
     __tablename__ = "spend_plan"
