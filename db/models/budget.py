@@ -14,9 +14,18 @@ class Budget(Base):
     spend_plans: Mapped[List["SpendPlan"]] = relationship(
         "SpendPlan", back_populates="budget", cascade="all, delete-orphan"
     )
+    real_spends: Mapped[List["RealSpend"]] = relationship(
+        "RealSpend", back_populates="budget", cascade="all, delete-orphan"
+    )
     income_plans: Mapped[List["IncomePlan"]] = relationship(
         "IncomePlan", back_populates="budget", cascade="all, delete-orphan"
     )
-    real_spends: Mapped[List["RealSpend"]] = relationship(
-        "RealSpend", back_populates="budget", cascade="all, delete-orphan"
+    real_incomes: Mapped[List["RealIncome"]] = relationship(
+        "RealIncome", back_populates="budget", cascade="all, delete-orphan"
+    )
+    savings_plan: Mapped[List["SavingsPlan"]] = relationship(
+        "SavingsPlan", back_populates="budget", cascade="all, delete-orphan"
+    )
+    real_savings: Mapped[List["RealSavings"]] = relationship(
+        "RealSavings", back_populates="budget", cascade="all, delete-orphan"
     )

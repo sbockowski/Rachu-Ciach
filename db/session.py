@@ -2,7 +2,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-SQLITE_PATH = "sqlite:///rachu-ciach.db"
+SQLITE_PATH = "sqlite:///db/rachu-ciach.db"
 
 engine = create_engine(
     SQLITE_PATH,
