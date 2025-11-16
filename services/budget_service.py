@@ -45,7 +45,8 @@ class BudgetService:
             kind = Kind(name=name)
             session.add(kind)
             session.refresh(kind)
-            return kind.id as e:
+            return kind.id
+        except IntegrityError as e:
             session.rollback()
             raise ValueError(f"Income type '{name}' already exists.") from e
         finally:
