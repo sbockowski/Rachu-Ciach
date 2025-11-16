@@ -79,10 +79,6 @@ class BudgetService:
             session.close()
 
     def get_planned_spends(self, budget_name: str):
-        """
-        Zwraca listę krotek: (budget_name, category_name, amount)
-        implementowane ORM-owo: joiny i selecty.
-        """
         session = self.Session()
         try:
             q = (

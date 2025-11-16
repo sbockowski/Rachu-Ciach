@@ -1,13 +1,11 @@
 import argparse
-from db.connection import init_db
-from services.budget import *
+from services.budget_service import BudgetService
 
 def main():
-
     parser = argparse.ArgumentParser(
         description="Rachu Ciach - Budget manager CLI"
     )
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    subparsers = parser.add_subparsers(dest="cmd", required=True)
 
     # init db
     subparsers.add_parser("init-db", help="Create all tables")
@@ -52,48 +50,95 @@ def main():
     parser_add_savings_plan.add_argument("amount", type=float, help="Amount of savings")
 
     args = parser.parse_args()
+    svc = BudgetService()
 
     # dispatcher
-    if args.command == "init-db":
-        print(init_db(reset=False))
-    elif args.command == "reset-db":
-        if getattr(args, "yes", False):
-            print(init_db(reset=True))
-        else:
-            confirm = input("⚠️ This function will delete all data. Enter 'yes' to confirm: ")
-            if confirm.strip().lower() == "tak":
-                print(init_db(reset=True))
-            else:
-                print("Database reset cancelled.")
+    # if args.command == "init-db":
+    #     print(init_db(reset=False))
+    # elif args.command == "reset-db":
+    #     if getattr(args, "yes", False):
+    #         print(init_db(reset=True))
+    #     else:
+    #         confirm = input("⚠️ This function will delete all data. Enter 'yes' to confirm: ")
+    #         if confirm.strip().lower() == "tak":
+    #             print(init_db(reset=True))
+    #         else:
+    #             print("Database reset cancelled.")
 
-    elif args.command == "create-budget":
+    if args.cmd == "init-db":
+        from db.session import engine
+        from db.models.base import Base
+        Base.metadata.create_all(bind=engine)
+        print("DB tables created (if not present).")
+
+    elif args.cmd == "create-budget":
         budget_id = create_budget(args.name)
         print(f"Budget '{args.name}' created with id={budget_id}")
 
-    elif args.command == "add-category":
+    elif args.cmd == "add-category":
         category_id = add_category(args.name)
         print(f"Category '{args.name}' created with id={category_id}")
 
-    elif args.command == "add-income-type":
+    elif args.cmd == "add-income-type":
         income_type_id = add_income_type(args.name)
         print(f"Income type '{args.name}' created with id={income_type_id}")
 
-    elif args.command == "add-goal":
+    elif args.cmd == "add-goal":
         goal_id = add_goal(args.name)
         print(f"Goal '{args.name}' created with id={goal_id}")
 
-    elif args.command == "add-income-plan":
+    elif args.cmd == "add-income-plan":
         # category_id = add_category(args.name)
         print(f"Add new entry for Income Plan. Set AMOUNT for income type NAME") # TODO - show amount and name
 
-    elif args.command == "add-spend-plan":
+    elif args.cmd == "add-spend-plan":
         # category_id = add_category(args.name)
         print(f"Add new entry for Spend Plan. Set AMOUNT for category NAME") # TODO - show amount and name
 
-    elif args.command == "add-savings-plan":
+    elif args.cmd == "add-savings-plan":
         # category_id = add_category(args.name)
         print(f"Add new entry for Savings Plan. Set AMOUT for goal NAME") # TODO - show amount and name
 
 
 if __name__ == "__main__":
     main()
+
+# main.py (fragment)
+import argparse
+from services.budget_service import BudgetService
+
+def main():
+    parser = argparse.ArgumentParser()
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    sub.add_parser("init-db")
+    parser_create = sub.add_parser("create-budget")
+    parser_create.add_argument("name")
+
+    parser_add_cat = sub.add_parser("add-category")
+    parser_add_cat.add_argument("name")
+
+    parser_get_plan = sub.add_parser("show-planned")
+    parser_get_plan.add_argument("budget_name")
+
+    args = parser.parse_args()
+    svc = BudgetService()
+
+    if args.cmd == "init-db":
+        # utworzenie tabel (jeśli jeszcze nie istnieją)
+        from db.session import Base, engine
+        Base.metadata.create_all(bind=engine)
+        print("DB tables created (if not present).")
+
+    elif args.cmd == "create-budget":
+        bid = svc.create_budget(args.name)
+        print("Created budget id=", bid)
+
+    elif args.cmd == "add-category":
+        cid = svc.add_category(args.name)
+        print("Category id=", cid)
+
+    elif args.cmd == "show-planned":
+        rows = svc.get_planned_spends(args.budget_name)
+        for bname, cname, amount in rows:
+            print(f"{bname} | {cname} | {amount}")
