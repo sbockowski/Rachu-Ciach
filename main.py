@@ -83,7 +83,7 @@ def main():
         print(f"Category '{args.name}' created with id={category_id}")
 
     elif args.cmd == "add-kind":
-        income_type_id = svc.add_kind(args.name)
+        kind_id = svc.add_kind(args.name)
         print(f"Income kind '{args.name}' created with id={kind_id}")
 
     elif args.cmd == "add-goal":
