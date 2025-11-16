@@ -1,6 +1,6 @@
 # services/budget_service.py
 from db.session import SessionLocal
-from db.models import Budget, Category, IncomeType, Goal, SpendPlan, IncomePlan, SavingsPlan
+from db.models import Budget, Category, Kind, Goal, SpendPlan, IncomePlan, SavingsPlan
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
@@ -39,15 +39,13 @@ class BudgetService:
         finally:
             session.close()
 
-    def add_income_type(self, name: str) -> int:
+    def add_kind(self, name: str) -> int:
         session = self.Session()
         try:
-            it = IncomeType(name=name)
-            session.add(it)
-            session.commit()
-            session.refresh(it)
-            return it.id
-        except IntegrityError as e:
+            kind = Kind(name=name)
+            session.add(kind)
+            session.refresh(kind)
+            return kind.id as e:
             session.rollback()
             raise ValueError(f"Income type '{name}' already exists.") from e
         finally:
