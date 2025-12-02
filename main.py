@@ -49,8 +49,10 @@ def main():
     parser_add_savings_plan.add_argument("goal_id", type=int, help="Goal id")
     parser_add_savings_plan.add_argument("amount", type=float, help="Amount of savings")
 
-    parser_get_plan = subparsers.add_parser("show-planned")
-    parser_get_plan.add_argument("budget_name", type=str, help="Show budget with givin name")
+    parser_get_plan_spends = subparsers.add_parser("show-planned-spends")
+    parser_get_plan_spends.add_argument("budget_name", type=str, help="Show budget with givin name")
+
+    parser_get_goals = subparsers.add_parser("show-goals", help="Show list of goals")
 
     args = parser.parse_args()
     svc = BudgetService()
@@ -102,10 +104,15 @@ def main():
         # category_id = add_category(args.name)
         print(f"Add new entry for Savings Plan. Set AMOUT for goal NAME") # TODO - show amount and name
 
-    elif args.cmd == "show-planned":
+    elif args.cmd == "show-planned-spends":
         rows = svc.get_planned_spends(args.budget_name)
         for bname, cname, amount in rows:
             print(f"{bname} | {cname} | {amount}")
+    
+    elif args.cmd == "show-goals":
+        rows = svc.get_goal_list()
+        for gid, gname in rows:
+            print(f"{gid} | {gname}")
 
 if __name__ == "__main__":
     main()

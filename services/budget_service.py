@@ -90,3 +90,14 @@ class BudgetService:
             return results
         finally:
             session.close()
+
+    def get_goal_list(self):
+        session = self.Session()
+        try:
+            q = (
+                session.query(Goal.id, Goal.name)
+            )
+            results = q.all()
+            return results
+        finally:
+            session.close()

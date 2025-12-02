@@ -12,3 +12,4 @@ class Goal(Base):
 
     savings_plans: Mapped[List["SavingsPlan"]] = relationship("SavingsPlan", back_populates="goal")
     real_savings: Mapped[List["RealSavings"]] = relationship("RealSavings", back_populates="goal")
+
