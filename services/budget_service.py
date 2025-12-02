@@ -101,3 +101,25 @@ class BudgetService:
             return results
         finally:
             session.close()
+
+    def get_category_list(self):
+        session = self.Session()
+        try:
+            q = (
+                session.query(Category.id, Category.name)
+            )
+            results = q.all()
+            return results
+        finally:
+            session.close()
+
+    def get_kind_list(self):
+        session = self.Session()
+        try:
+            q = (
+                session.query(Kind.id, Kind.name)
+            )
+            results = q.all()
+            return results
+        finally:
+            session.close()

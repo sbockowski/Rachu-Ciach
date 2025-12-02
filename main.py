@@ -54,6 +54,10 @@ def main():
 
     parser_get_goals = subparsers.add_parser("show-goals", help="Show list of goals")
 
+    parser_get_kinds = subparsers.add_parser("show-kinds", help="Show list of kinds")
+    
+    parser_get_categories = subparsers.add_parser("show-categories", help="Show list of categories")
+
     args = parser.parse_args()
     svc = BudgetService()
 
@@ -113,6 +117,16 @@ def main():
         rows = svc.get_goal_list()
         for gid, gname in rows:
             print(f"{gid} | {gname}")
+
+    elif args.cmd == "show-kinds":
+        rows = svc.get_kind_list()
+        for gid, gname in rows:
+            print(f"{kid} | {kname}")
+
+    elif args.cmd == "show-categories":
+        rows = svc.get_category_list()
+        for gid, gname in rows:
+            print(f"{cid} | {cname}")
 
 if __name__ == "__main__":
     main()
