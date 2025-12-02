@@ -101,8 +101,8 @@ def main():
         print(f"Add new entry for Income Plan. Set AMOUNT for income type NAME") # TODO - show amount and name
 
     elif args.cmd == "add-spend-plan":
-        # category_id = add_category(args.name)
-        print(f"Add new entry for Spend Plan. Set AMOUNT for category NAME") # TODO - show amount and name
+        spend_plan_id = svc.add_spend_plan(args.budget_id, args.category_id, args.amount)
+        print(f"Add new entry for Spend Plan. Spend plan id {spend_plan_id}. Set AMOUNT for category NAME") # TODO - show amount and name
 
     elif args.cmd == "add-savings-plan":
         # category_id = add_category(args.name)
@@ -120,12 +120,12 @@ def main():
 
     elif args.cmd == "show-kinds":
         rows = svc.get_kind_list()
-        for gid, gname in rows:
+        for kid, kname in rows:
             print(f"{kid} | {kname}")
 
     elif args.cmd == "show-categories":
         rows = svc.get_category_list()
-        for gid, gname in rows:
+        for cid, cname in rows:
             print(f"{cid} | {cname}")
 
 if __name__ == "__main__":
