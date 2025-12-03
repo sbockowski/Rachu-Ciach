@@ -1,7 +1,7 @@
 # services/budget_service.py
+from upsert import upsert
 from db.session import SessionLocal
 from db.models import Budget, Category, Kind, Goal, SpendPlan, IncomePlan, SavingsPlan
-from upsert import upsert
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
