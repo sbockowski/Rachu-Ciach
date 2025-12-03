@@ -32,19 +32,19 @@ def main():
     parser_add_goal.add_argument("name", type=str, help="Goal type name")
 
     # add-income-plan
-    parser_add_income_plan = subparsers.add_parser("add-income-plan", help="Add a new income plan")
+    parser_add_income_plan = subparsers.add_parser("add-or-update-income-plan", help="Add a new income plan")
     parser_add_income_plan.add_argument("budget_id", type=int, help="Budget id")
     parser_add_income_plan.add_argument("income_type_id", type=int, help="Income type id")
     parser_add_income_plan.add_argument("amount", type=float, help="Amount of income")
 
     # add-spend-plan
-    parser_add_spend_plan = subparsers.add_parser("add-spend-plan", help="Add a new spend plan")
+    parser_add_spend_plan = subparsers.add_parser("add-or-update-spend-plan", help="Add a new spend plan")
     parser_add_spend_plan.add_argument("budget_id", type=int, help="Budget id")
     parser_add_spend_plan.add_argument("category_id", type=int, help="Category id")
     parser_add_spend_plan.add_argument("amount", type=float, help="Amount of spend")
 
     # add-savings-plan
-    parser_add_savings_plan = subparsers.add_parser("add-savings-plan", help="Add a new savings plan")
+    parser_add_savings_plan = subparsers.add_parser("add-or-update-savings-plan", help="Add a new savings plan")
     parser_add_savings_plan.add_argument("budget_id", type=int, help="Budget id")
     parser_add_savings_plan.add_argument("goal_id", type=int, help="Goal id")
     parser_add_savings_plan.add_argument("amount", type=float, help="Amount of savings")
@@ -53,6 +53,10 @@ def main():
     parser_get_plan_spends.add_argument("budget_name", type=str, help="Show budget with givin name")
 
     parser_get_goals = subparsers.add_parser("show-goals", help="Show list of goals")
+
+    parser_get_kinds = subparsers.add_parser("show-kinds", help="Show list of kinds")
+    
+    parser_get_categories = subparsers.add_parser("show-categories", help="Show list of categories")
 
     args = parser.parse_args()
     svc = BudgetService()
@@ -92,17 +96,17 @@ def main():
         goal_id = svc.add_goal(args.name)
         print(f"Goal '{args.name}' created with id={goal_id}")
 
-    elif args.cmd == "add-income-plan":
-        # category_id = add_category(args.name)
-        print(f"Add new entry for Income Plan. Set AMOUNT for income type NAME") # TODO - show amount and name
+    elif args.cmd == "add-or-update-income-plan":
+        income_plan_id = svc.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
+        print(f"Add new entry for Income Plan. Income plan id {income_plan_id}. Set AMOUNT for kind NAME") # TODO - show amount and name
 
-    elif args.cmd == "add-spend-plan":
-        # category_id = add_category(args.name)
-        print(f"Add new entry for Spend Plan. Set AMOUNT for category NAME") # TODO - show amount and name
+    elif args.cmd == "add-or-update-spend-plan":
+        spend_plan_id = svc.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
+        print(f"Add new entry for Spend Plan. Spend plan id {spend_plan_id}. Set AMOUNT for category NAME") # TODO - show amount and name
 
-    elif args.cmd == "add-savings-plan":
-        # category_id = add_category(args.name)
-        print(f"Add new entry for Savings Plan. Set AMOUT for goal NAME") # TODO - show amount and name
+    elif args.cmd == "add-or-update-savings-plan":
+        savings_plan_id = svc.add_or_update_spend_plan(args.budget_id, args.goal_id, args.amount)
+        print(f"Add new entry for Savings Plan. Savings plan id {savings_plan_id}. Set AMOUNT for goal NAME") # TODO - show amount and name
 
     elif args.cmd == "show-planned-spends":
         rows = svc.get_planned_spends(args.budget_name)
@@ -113,6 +117,16 @@ def main():
         rows = svc.get_goal_list()
         for gid, gname in rows:
             print(f"{gid} | {gname}")
+
+    elif args.cmd == "show-kinds":
+        rows = svc.get_kind_list()
+        for kid, kname in rows:
+            print(f"{kid} | {kname}")
+
+    elif args.cmd == "show-categories":
+        rows = svc.get_category_list()
+        for cid, cname in rows:
+            print(f"{cid} | {cname}")
 
 if __name__ == "__main__":
     main()
