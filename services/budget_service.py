@@ -1,6 +1,7 @@
 # services/budget_service.py
 from db.session import SessionLocal
 from db.models import Budget, Category, Kind, Goal, SpendPlan, IncomePlan, SavingsPlan
+from upsert import upsert
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
@@ -48,7 +49,7 @@ class BudgetService:
             return kind.id
         except IntegrityError as e:
             session.rollback()
-            raise ValueError(f"Income type '{name}' already exists.") from e
+            raise ValueError(f"Kind '{name}' already exists.") from e
         finally:
             session.close()
 
@@ -66,13 +67,106 @@ class BudgetService:
         finally:
             session.close()
 
-    def add_spend_plan(self, budget_id: int, category_id: int, amount: float) -> int:
+    
+
+    def add_or_update_spend_plan(self, budget_id: int, category_id: int, amount: float) -> int:
         session = self.Session()
         try:
-            sp = SpendPlan(budget_id=budget_id, category_id=category_id, amount=amount)
-            session.add(sp)
-            session.commit()
-            session.refresh(sp)
+            data = {
+                "budget_id": budget_id, 
+                "category_id": category_id, 
+                "amount": amount
+            }
+            result = upsert(
+                session=session,
+                model=SpendPlan,
+                data=data,
+                conflict_columns=["budget_id", "category_id"]
+            )
+
+            inserted_pk = getattr(result, "inserted_primary_key", None)
+            if inserted_pk:
+                print("Add new spend plan.")
+                return inserted_pk[0]
+
+            # if UPDATE — get ID manually
+            sp = (
+                session.query(SpendPlan)
+                .filter(
+                    SpendPlan.budget_id == budget_id,
+                    SpendPlan.category_id == category_id
+                )
+                .first()
+            )
+            print("Update spend plan.")
+            return sp.id
+        finally:
+            session.close()
+
+    def add_or_update_savings_plan(self, budget_id: int, goal_id: int, amount: float) -> int:
+        session = self.Session()
+        try:
+            data = {
+                "budget_id": budget_id, 
+                "goal_id": goal_id, 
+                "amount": amount
+            }
+            result = upsert(
+                session=session,
+                model=SavingsPlan,
+                data=data,
+                conflict_columns=["budget_id", "goal_id"]
+            )
+
+            inserted_pk = getattr(result, "inserted_primary_key", None)
+            if inserted_pk:
+                print("Add new savings plan.")
+                return inserted_pk[0]
+
+            # if UPDATE — get ID manually
+            sp = (
+                session.query(SavingsPlan)
+                .filter(
+                    SavingsPlan.budget_id == budget_id,
+                    SavingsPlan.goal_id == goal_id
+                )
+                .first()
+            )
+            print("Update savings plan.")
+            return sp.id
+        finally:
+            session.close()
+
+    def add_or_update_income_plan(self, budget_id: int, kind_id: int, amount: float) -> int:
+        session = self.Session()
+        try:
+            data = {
+                "budget_id": budget_id, 
+                "kind_id": kind_id, 
+                "amount": amount
+            }
+            result = upsert(
+                session=session,
+                model=IncomePlan,
+                data=data,
+                conflict_columns=["budget_id", "kind_id"]
+            )
+
+            inserted_pk = getattr(result, "inserted_primary_key", None)
+            if inserted_pk:
+                print("Add new income plan.")
+                return inserted_pk[0]
+
+            # if UPDATE — get ID manually
+            sp = (
+                session.query(IncomePlan)
+                .filter(
+                    IncomePlan.budget_id == budget_id,
+                    IncomePlan.kind_id == kind_id
+                )
+                .first()
+            )
+            print("Update income plan.")
             return sp.id
         finally:
             session.close()
