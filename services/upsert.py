@@ -1,5 +1,5 @@
 from typing import Type, Any, Dict
-from sqlalchemy import insert
+from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import DeclarativeBase
 
