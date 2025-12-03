@@ -120,7 +120,7 @@ class BudgetService:
             )
 
             inserted_pk = getattr(result, "inserted_primary_key", None)
-            if inserted_pk:
+            if inserted_pk[0] != 0:
                 print("Add new savings plan.")
                 return inserted_pk[0]
 
@@ -154,7 +154,7 @@ class BudgetService:
             )
 
             inserted_pk = getattr(result, "inserted_primary_key", None)
-            if inserted_pk:
+            if inserted_pk[0] != 0:
                 print("Add new income plan.")
                 return inserted_pk[0]
 
