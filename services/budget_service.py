@@ -158,7 +158,7 @@ class BudgetService:
                 return inserted_pk[0]
 
             # if UPDATE — get ID manually
-            sp = (
+            ip = (
                 session.query(IncomePlan)
                 .filter(
                     IncomePlan.budget_id == budget_id,
@@ -167,7 +167,7 @@ class BudgetService:
                 .first()
             )
             print("Update income plan.")
-            return sp.id
+            return ip.id
         finally:
             session.close()
 

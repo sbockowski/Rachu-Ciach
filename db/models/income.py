@@ -9,7 +9,7 @@ class IncomePlan(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     budget_id: Mapped[int] = mapped_column(ForeignKey("budget.id"), nullable=False)
-    type_id: Mapped[int] = mapped_column(ForeignKey("kind.id"), nullable=False)
+    kind_id: Mapped[int] = mapped_column(ForeignKey("kind.id"), nullable=False)
     amount: Mapped[float] = mapped_column(Float, nullable=False)
 
     budget: Mapped["Budget"] = relationship("Budget", back_populates="income_plans")
