@@ -2,6 +2,7 @@
 from services.upsert import upsert
 from db.models import Budget, Category, Kind, Goal, SpendPlan, IncomePlan, SavingsPlan
 from db.session import SessionLocal
+import sys
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
 
@@ -230,5 +231,15 @@ class BudgetService:
             )
             results = q.all()
             return results
+        finally:
+            session.close()
+
+    def get_name_by_id(self, model, model_id):
+        session = self.Session()
+        try:
+            result = (session.query(model.name).filter(model.id == model_id).one_or_none())
+            if result is None:
+                return None
+            return result[0]
         finally:
             session.close()

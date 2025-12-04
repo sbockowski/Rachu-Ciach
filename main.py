@@ -34,7 +34,7 @@ def main():
     # add-income-plan
     parser_add_income_plan = subparsers.add_parser("add-or-update-income-plan", help="Add a new income plan")
     parser_add_income_plan.add_argument("budget_id", type=int, help="Budget id")
-    parser_add_income_plan.add_argument("income_type_id", type=int, help="Income type id")
+    parser_add_income_plan.add_argument("kind_id", type=int, help="Income kind id")
     parser_add_income_plan.add_argument("amount", type=float, help="Amount of income")
 
     # add-spend-plan
@@ -60,6 +60,10 @@ def main():
     parser_get_kinds = subparsers.add_parser("show-kinds", help="Show list of kinds")
     
     parser_get_categories = subparsers.add_parser("show-categories", help="Show list of categories")
+
+    parser_get_name_by_id = subparsers.add_parser("get-name-by-id")
+    parser_get_name_by_id.add_argument("model", type=str)
+    parser_get_name_by_id.add_argument("model_id", type=int)
 
     args = parser.parse_args()
     svc = BudgetService()
@@ -100,16 +104,28 @@ def main():
         print(f"Goal '{args.name}' created with id={goal_id}")
 
     elif args.cmd == "add-or-update-income-plan":
+        from db.models import Kind
         income_plan_id = svc.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
-        print(f"Add new entry for Income Plan. Income plan id {income_plan_id}. Set AMOUNT for kind NAME") # TODO - show amount and name
+        kind_name = svc.get_name_by_id(Kind, args.kind_id)
+        print(f"Savings plan id: {income_plan_id}")
+        print(f"Goal: {kind_name}")
+        print(f"Amount: {args.amount}")
 
     elif args.cmd == "add-or-update-spend-plan":
+        from db.models import Category
         spend_plan_id = svc.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
-        print(f"Add new entry for Spend Plan. Spend plan id {spend_plan_id}. Set AMOUNT for category NAME") # TODO - show amount and name
+        category_name = svc.get_name_by_id(Category, args.category_id)
+        print(f"Savings plan id: {spend_plan_id}")
+        print(f"Goal: {category_name}")
+        print(f"Amount: {args.amount}")
 
     elif args.cmd == "add-or-update-savings-plan":
+        from db.models import Goal
         savings_plan_id = svc.add_or_update_savings_plan(args.budget_id, args.goal_id, args.amount)
-        print(f"Add new entry for Savings Plan. Savings plan id {savings_plan_id}. Set AMOUNT for goal NAME") # TODO - show amount and name
+        goal_name = svc.get_name_by_id(Goal, args.goal_id)
+        print(f"Savings plan id: {savings_plan_id}")
+        print(f"Goal: {goal_name}")
+        print(f"Amount: {args.amount}")
 
     elif args.cmd == "show-planned-spends":
         rows = svc.get_planned_spends(args.budget_name)
@@ -135,6 +151,10 @@ def main():
         rows = svc.get_category_list()
         for cid, cname in rows:
             print(f"{cid} | {cname}")
+
+    elif args.cmd == "get-name-by-id":
+        row = svc.get_name_by_id(args.model, args.model_id)
+        print(row)
 
 if __name__ == "__main__":
     main()
