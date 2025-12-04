@@ -186,6 +186,20 @@ class BudgetService:
         finally:
             session.close()
 
+    def get_planned_savings(self, budget_name: str):
+        session = self.Session()
+        try:
+            q = (
+                session.query(Budget.name, Goal.name, SavingsPlan.amount)
+                .join(SavingsPlan, SavingsPlan.budget_id == Budget.id)
+                .join(Goal, SavingsPlan.goal_id == Goal.id)
+                .filter(Budget.name == budget_name)
+            )
+            results = q.all()
+            return results
+        finally:
+            session.close()    
+
     def get_goal_list(self):
         session = self.Session()
         try:
