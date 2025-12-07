@@ -68,8 +68,6 @@ class BudgetService:
         finally:
             session.close()
 
-    
-
     def add_or_update_spend_plan(self, budget_id: int, category_id: int, amount: float) -> int:
         session = self.Session()
         try:
@@ -230,15 +228,5 @@ class BudgetService:
             )
             results = q.all()
             return results
-        finally:
-            session.close()
-
-    def get_name_by_id(self, model, model_id):
-        session = self.Session()
-        try:
-            result = (session.query(model.name).filter(model.id == model_id).one_or_none())
-            if result is None:
-                return None
-            return result[0]
         finally:
             session.close()

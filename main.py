@@ -1,4 +1,5 @@
 import argparse
+from db.utils import get_name_by_id
 from services.budget_service import BudgetService
 
 def main():
@@ -106,7 +107,7 @@ def main():
     elif args.cmd == "add-or-update-income-plan":
         from db.models import Kind
         income_plan_id = svc.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
-        kind_name = svc.get_name_by_id(Kind, args.kind_id)
+        kind_name = get_name_by_id(Kind, args.kind_id)
         print(f"Savings plan id: {income_plan_id}")
         print(f"Goal: {kind_name}")
         print(f"Amount: {args.amount}")
@@ -114,7 +115,7 @@ def main():
     elif args.cmd == "add-or-update-spend-plan":
         from db.models import Category
         spend_plan_id = svc.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
-        category_name = svc.get_name_by_id(Category, args.category_id)
+        category_name = get_name_by_id(Category, args.category_id)
         print(f"Savings plan id: {spend_plan_id}")
         print(f"Goal: {category_name}")
         print(f"Amount: {args.amount}")
