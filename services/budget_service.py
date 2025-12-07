@@ -1,5 +1,5 @@
 # services/budget_service.py
-from services.upsert import upsert
+from db.utils.upsert import upsert
 from db.models import Budget, Category, Kind, Goal, SpendPlan, IncomePlan, SavingsPlan
 from db.session import SessionLocal
 from datetime import datetime
