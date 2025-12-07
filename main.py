@@ -1,5 +1,5 @@
 import argparse
-from db.utils import get_name_by_id
+from db.utils.select import get_name_by_id
 from services.budget_service import BudgetService
 
 def main():
@@ -123,7 +123,7 @@ def main():
     elif args.cmd == "add-or-update-savings-plan":
         from db.models import Goal
         savings_plan_id = svc.add_or_update_savings_plan(args.budget_id, args.goal_id, args.amount)
-        goal_name = svc.get_name_by_id(Goal, args.goal_id)
+        goal_name = get_name_by_id(Goal, args.goal_id)
         print(f"Savings plan id: {savings_plan_id}")
         print(f"Goal: {goal_name}")
         print(f"Amount: {args.amount}")
