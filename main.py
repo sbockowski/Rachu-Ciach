@@ -2,8 +2,9 @@ import argparse
 from db.utils.select import get_name_by_id
 from db.session import engine
 from services import (BudgetService, CategoryService, KindService, GoalService, SpendPlanService, 
-    IncomePlanService, SavingsPlanService)
-from db.models import (Base, Budget, Kind, Category, Goal, SpendPlan, IncomePlan, SavingsPlan)
+    IncomePlanService, SavingsPlanService, RealIncomeService, RealSavingsService, RealSpendService)
+from db.models import (Base, Budget, Kind, Category, Goal, 
+    SpendPlan, IncomePlan, SavingsPlan, RealIncome, RealSavings, RealSpend)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -52,6 +53,12 @@ def main():
     parser_add_savings_plan.add_argument("budget_id", type=int, help="Budget id")
     parser_add_savings_plan.add_argument("goal_id", type=int, help="Goal id")
     parser_add_savings_plan.add_argument("amount", type=float, help="Amount of savings")
+
+    # add-real-savings
+    parser_add_real_savings = subparsers.add_parser("add-real-savings", help="Add a new saving")
+    parser_add_real_savings.add_argument("budget_id", type=int, help="Budget id")
+    parser_add_real_savings.add_argument("goal_id", type=int, help="Goal id")
+    parser_add_real_savings.add_argument("amount", type=float, help="Amount of savings")
 
     parser_get_plan_spends = subparsers.add_parser("show-planned-spends")
     parser_get_plan_spends.add_argument("budget_name", type=str, help="Show planned spends with givin budget name")
@@ -130,6 +137,14 @@ def main():
         savings_plan_id = savings_plan_service.add_or_update_savings_plan(args.budget_id, args.goal_id, args.amount)
         goal_name = get_name_by_id(Goal, args.goal_id)
         print(f"Savings plan id: {savings_plan_id}")
+        print(f"Goal: {goal_name}")
+        print(f"Amount: {args.amount}")
+
+    elif args.cmd == "add-real-savings":
+        real_savings_service = RealSavingsService()
+        real_savings_id = real_savings_service.add_real_savings(args.budget_id, args.goal_id, args.amount)
+        goal_name = get_name_by_id(Goal, args.goal_id)
+        print(f"Savings id: {real_savings_id}")
         print(f"Goal: {goal_name}")
         print(f"Amount: {args.amount}")
 
