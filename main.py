@@ -1,6 +1,9 @@
 import argparse
 from db.utils.select import get_name_by_id
-from services.budget_service import BudgetService
+from db.session import engine
+from services import (BudgetService, CategoryService, KindService, GoalService, SpendPlanService, 
+    IncomePlanService, SavingsPlanService)
+from db.models import (Base, Budget, Kind, Category, Goal, SpendPlan, IncomePlan, SavingsPlan)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -67,7 +70,7 @@ def main():
     parser_get_name_by_id.add_argument("model_id", type=int)
 
     args = parser.parse_args()
-    svc = BudgetService()
+
 
     # dispatcher
     # if args.command == "init-db":
@@ -83,78 +86,85 @@ def main():
     #             print("Database reset cancelled.")
 
     if args.cmd == "init-db":
-        from db.session import engine
-        from db.models import Base
         Base.metadata.create_all(bind=engine)
         print("DB tables created (if not present).")
 
     elif args.cmd == "create-budget":
-        budget_id = svc.create_budget(args.name)
+        budget_service = BudgetService()
+        budget_id = budget_service.create_budget(args.name)
         print(f"Budget '{args.name}' created with id={budget_id}")
 
     elif args.cmd == "add-category":
-        category_id = svc.add_category(args.name)
+        category_service = CategoryService()
+        category_id = category_service.add_category(args.name)
         print(f"Category '{args.name}' created with id={category_id}")
 
     elif args.cmd == "add-kind":
-        kind_id = svc.add_kind(args.name)
+        kind_service = KindService()
+        kind_id = kind_service.add_kind(args.name)
         print(f"Income kind '{args.name}' created with id={kind_id}")
 
     elif args.cmd == "add-goal":
-        goal_id = svc.add_goal(args.name)
+        goal_service = GoalService()
+        goal_id = goal_service.add_goal(args.name)
         print(f"Goal '{args.name}' created with id={goal_id}")
 
     elif args.cmd == "add-or-update-income-plan":
-        from db.models import Kind
-        income_plan_id = svc.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
+        income_plan_service = IncomePlanService()
+        income_plan_id = income_plan_service.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
         kind_name = get_name_by_id(Kind, args.kind_id)
         print(f"Savings plan id: {income_plan_id}")
         print(f"Goal: {kind_name}")
         print(f"Amount: {args.amount}")
 
     elif args.cmd == "add-or-update-spend-plan":
-        from db.models import Category
-        spend_plan_id = svc.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
+        spend_plan_service = SpendPlanService()
+        spend_plan_id = spend_plan_service.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
         category_name = get_name_by_id(Category, args.category_id)
         print(f"Savings plan id: {spend_plan_id}")
         print(f"Goal: {category_name}")
         print(f"Amount: {args.amount}")
 
     elif args.cmd == "add-or-update-savings-plan":
-        from db.models import Goal
-        savings_plan_id = svc.add_or_update_savings_plan(args.budget_id, args.goal_id, args.amount)
+        savings_plan_service = SavingsPlanService()
+        savings_plan_id = savings_plan_service.add_or_update_savings_plan(args.budget_id, args.goal_id, args.amount)
         goal_name = get_name_by_id(Goal, args.goal_id)
         print(f"Savings plan id: {savings_plan_id}")
         print(f"Goal: {goal_name}")
         print(f"Amount: {args.amount}")
 
     elif args.cmd == "show-planned-spends":
-        rows = svc.get_planned_spends(args.budget_name)
+        spend_plan_service = SpendPlanService()
+        rows = spend_plan_service.get_planned_spends(args.budget_name)
         for bname, cname, amount in rows:
             print(f"{bname} | {cname} | {amount}")
     
     elif args.cmd == "show-planned-savings":
-        rows = svc.get_planned_savings(args.budget_name)
+        savings_plan_service = SavingsPlanService()
+        rows = savings_plan_service.get_planned_savings(args.budget_name)
         for bname, gname, amount in rows:
             print(f"{bname} | {gname} | {amount}")
     
     elif args.cmd == "show-goals":
-        rows = svc.get_goal_list()
+        goal_service = GoalService()
+        rows = goal_service.get_goal_list()
         for gid, gname in rows:
             print(f"{gid} | {gname}")
 
     elif args.cmd == "show-kinds":
-        rows = svc.get_kind_list()
+        kind_service = KindService()
+        rows = kind_service.get_kind_list()
         for kid, kname in rows:
             print(f"{kid} | {kname}")
 
     elif args.cmd == "show-categories":
-        rows = svc.get_category_list()
+        category_service = CategoryService()
+        rows = category_service.get_category_list()
         for cid, cname in rows:
             print(f"{cid} | {cname}")
 
     elif args.cmd == "get-name-by-id":
-        row = svc.get_name_by_id(args.model, args.model_id)
+        row = get_name_by_id(args.model, args.model_id)
         print(row)
 
 if __name__ == "__main__":
