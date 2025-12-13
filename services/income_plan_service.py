@@ -1,6 +1,6 @@
 from db.utils.upsert import upsert
 from .base_service import BaseService
-from db.models import IncomePlan
+from db.models import IncomePlan, Kind, Budget
 
 
 class IncomePlanService(BaseService):
@@ -35,5 +35,19 @@ class IncomePlanService(BaseService):
             )
             print("Update income plan.")
             return ip.id
+        finally:
+            session.close()
+
+    def get_planned_incomes(self, budget_name: str):
+        session = self.Session()
+        try:
+            q = (
+                session.query(Budget.name, Kind.name, IncomePlan.amount)
+                .join(IncomePlan, IncomePlan.budget_id == Budget.id)
+                .join(Kind, IncomePlan.kind_id == Kind.id)
+                .filter(Budget.name == budget_name)
+            )
+            results = q.all()
+            return results
         finally:
             session.close()
