@@ -60,6 +60,18 @@ def main():
     parser_add_real_savings.add_argument("goal_id", type=int, help="Goal id")
     parser_add_real_savings.add_argument("amount", type=float, help="Amount of savings")
 
+    # add-real-spend
+    parser_add_real_spend = subparsers.add_parser("add-real-spend", help="Add a new spend")
+    parser_add_real_spend.add_argument("budget_id", type=int, help="Budget id")
+    parser_add_real_spend.add_argument("category_id", type=int, help="Category id")
+    parser_add_real_spend.add_argument("amount", type=float, help="Amount of spend")
+
+    # add-real-income
+    parser_add_real_income = subparsers.add_parser("add-real-income", help="Add a new income")
+    parser_add_real_income.add_argument("budget_id", type=int, help="Budget id")
+    parser_add_real_income.add_argument("kind_id", type=int, help="Kind id")
+    parser_add_real_income.add_argument("amount", type=float, help="Amount of income")
+
     parser_get_plan_spends = subparsers.add_parser("show-planned-spends")
     parser_get_plan_spends.add_argument("budget_name", type=str, help="Show planned spends with givin budget name")
 
@@ -146,6 +158,22 @@ def main():
         goal_name = get_name_by_id(Goal, args.goal_id)
         print(f"Savings id: {real_savings_id}")
         print(f"Goal: {goal_name}")
+        print(f"Amount: {args.amount}")
+
+    elif args.cmd == "add-real-spend":
+        real_spend_service = RealSpendService()
+        real_spend_id = real_spend_service.add_real_spend(args.budget_id, args.category_id, args.amount)
+        category_name = get_name_by_id(Category, args.category_id)
+        print(f"Spend id: {real_spend_id}")
+        print(f"Category: {category_name}")
+        print(f"Amount: {args.amount}")
+
+    elif args.cmd == "add-real-income":
+        real_income_service = RealIncomeService()
+        real_income_id = real_income_service.add_real_income(args.budget_id, args.kind_id, args.amount)
+        kind_name = get_name_by_id(Kind, args.kind_id)
+        print(f"Income id: {real_income_id}")
+        print(f"Kind: {kind_name}")
         print(f"Amount: {args.amount}")
 
     elif args.cmd == "show-planned-spends":
