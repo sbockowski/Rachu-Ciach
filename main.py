@@ -78,6 +78,9 @@ def main():
     parser_get_plan_savings = subparsers.add_parser("show-planned-savings")
     parser_get_plan_savings.add_argument("budget_name", type=str, help="Show planned savings with givin budget name")
 
+    parser_get_plan_incomes = subparsers.add_parser("show-planned-incomes")
+    parser_get_plan_incomes.add_argument("budget_name", type=str, help="Show planned incomes with givin budget name")
+
     parser_get_goals = subparsers.add_parser("show-goals", help="Show list of goals")
 
     parser_get_kinds = subparsers.add_parser("show-kinds", help="Show list of kinds")
@@ -188,6 +191,12 @@ def main():
         for bname, gname, amount in rows:
             print(f"{bname} | {gname} | {amount}")
     
+    elif args.cmd == "show-planned-incomes":
+        income_plan_service = IncomePlanService()
+        rows = income_plan_service.get_planned_incomes(args.budget_name)
+        for bname, kname, amount in rows:
+            print(f"{bname} | {kname} | {amount}")
+
     elif args.cmd == "show-goals":
         goal_service = GoalService()
         rows = goal_service.get_goal_list()
