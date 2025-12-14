@@ -79,6 +79,15 @@ def main():
     parser_get_plan_savings.add_argument("budget_name", type=str, help="Show planned savings with givin budget name")
 
     parser_get_plan_incomes = subparsers.add_parser("show-planned-incomes")
+    parser_get_plan_incomes.add_argument("budget_name", type=str, help="Show real incomes with givin budget name")
+
+    parser_get_real_spends = subparsers.add_parser("show-real-spends")
+    parser_get_real_spends.add_argument("budget_name", type=str, help="Show real spends with givin budget name")
+
+    parser_get_real_savings = subparsers.add_parser("show-real-savings")
+    parser_get_real_savings.add_argument("budget_name", type=str, help="Show real savings with givin budget name")
+
+    parser_get_plan_incomes = subparsers.add_parser("show-real-incomes")
     parser_get_plan_incomes.add_argument("budget_name", type=str, help="Show planned incomes with givin budget name")
 
     parser_get_goals = subparsers.add_parser("show-goals", help="Show list of goals")
@@ -194,6 +203,24 @@ def main():
     elif args.cmd == "show-planned-incomes":
         income_plan_service = IncomePlanService()
         rows = income_plan_service.get_planned_incomes(args.budget_name)
+        for bname, kname, amount in rows:
+            print(f"{bname} | {kname} | {amount}")
+
+    elif args.cmd == "show-real-spends":
+        real_spend_service = RealSpendService()
+        rows = real_spend_service.get_real_spends(args.budget_name)
+        for bname, cname, amount in rows:
+            print(f"{bname} | {cname} | {amount}")
+    
+    elif args.cmd == "show-real-savings":
+        real_savings_service = RealSavingsService()
+        rows = real_savings_service.get_real_savings(args.budget_name)
+        for bname, gname, amount in rows:
+            print(f"{bname} | {gname} | {amount}")
+    
+    elif args.cmd == "show-real-incomes":
+        real_income_service = RealIncomeService()
+        rows = real_income_service.get_real_incomes(args.budget_name)
         for bname, kname, amount in rows:
             print(f"{bname} | {kname} | {amount}")
 
