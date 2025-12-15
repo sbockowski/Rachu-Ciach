@@ -100,6 +100,12 @@ def main():
     parser_get_name_by_id.add_argument("model", type=str)
     parser_get_name_by_id.add_argument("model_id", type=int)
 
+    parser_update_real_spend = subparsers.add_parser("update-real-spend")
+    parser_update_real_spend.add_argument("budget_id", type=int)
+    parser_update_real_spend.add_argument("category_id", type=int)
+    parser_update_real_spend.add_argument("amount", type=int)
+    parser_update_real_spend.add_argument("updated_row_id", type=int)
+
     args = parser.parse_args()
 
 
@@ -144,7 +150,7 @@ def main():
         income_plan_service = IncomePlanService()
         income_plan_id = income_plan_service.add_or_update_income_plan(args.budget_id, args.kind_id, args.amount)
         kind_name = get_name_by_id(Kind, args.kind_id)
-        print(f"Savings plan id: {income_plan_id}")
+        print(f"Income plan id: {income_plan_id}")
         print(f"Goal: {kind_name}")
         print(f"Amount: {args.amount}")
 
@@ -152,7 +158,7 @@ def main():
         spend_plan_service = SpendPlanService()
         spend_plan_id = spend_plan_service.add_or_update_spend_plan(args.budget_id, args.category_id, args.amount)
         category_name = get_name_by_id(Category, args.category_id)
-        print(f"Savings plan id: {spend_plan_id}")
+        print(f"Spend plan id: {spend_plan_id}")
         print(f"Goal: {category_name}")
         print(f"Amount: {args.amount}")
 
@@ -175,6 +181,14 @@ def main():
     elif args.cmd == "add-real-spend":
         real_spend_service = RealSpendService()
         real_spend_id = real_spend_service.add_real_spend(args.budget_id, args.category_id, args.amount)
+        category_name = get_name_by_id(Category, args.category_id)
+        print(f"Spend id: {real_spend_id}")
+        print(f"Category: {category_name}")
+        print(f"Amount: {args.amount}")
+
+    elif args.cmd == "update-real-spend":
+        real_spend_service = RealSpendService()
+        real_spend_id = real_spend_service.update_real_spend(args.budget_id, args.category_id, args.amount, args.updated_row_id)
         category_name = get_name_by_id(Category, args.category_id)
         print(f"Spend id: {real_spend_id}")
         print(f"Category: {category_name}")
