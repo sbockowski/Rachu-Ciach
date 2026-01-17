@@ -45,5 +45,8 @@ class CategoryService(BaseService):
             if result == True:
                 print("Category name updated.")
                 return updated_row_id
+        except IntegrityError as e:
+            session.rollback()
+            raise ValueError(f"Category '{name}' already exists.") from e
         finally:
             session.close()

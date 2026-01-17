@@ -45,5 +45,8 @@ class GoalService(BaseService):
             if result == True:
                 print("Goal name updated.")
                 return updated_row_id
+        except IntegrityError as e:
+            session.rollback()
+            raise ValueError(f"Goal '{name}' already exists.") from e
         finally:
             session.close()

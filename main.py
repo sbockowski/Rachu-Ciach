@@ -122,6 +122,14 @@ def main():
     parser_change_goal_name.add_argument("name", type=str)
     parser_change_goal_name.add_argument("goal_id", type=int)
 
+    parser_change_kind_name = subparsers.add_parser("change-kind-name")
+    parser_change_kind_name.add_argument("name", type=str)
+    parser_change_kind_name.add_argument("kind_id", type=int)
+
+    parser_change_category_name = subparsers.add_parser("change-category-name")
+    parser_change_category_name.add_argument("name", type=str)
+    parser_change_category_name.add_argument("category_id", type=int)
+
     args = parser.parse_args()
 
 
@@ -293,6 +301,18 @@ def main():
         goal_name = get_name_by_id(Goal, args.goal_id)
         goal_id = goal_service.change_goal_name(args.name, args.goal_id)
         print(f"New name for goal {goal_name} is {args.name}.")
+    
+    elif args.cmd == "change-kind-name":
+        kind_service = KindService()
+        kind_name = get_name_by_id(Kind, args.kind_id)
+        kind_id = kind_service.change_kind_name(args.name, args.kind_id)
+        print(f"New name for kind {kind_name} is {args.name}.")
+
+    elif args.cmd == "change-category-name":
+        category_service = CategoryService()
+        category_name = get_name_by_id(Category, args.category_id)
+        category_id = category_service.change_category_name(args.name, args.category_id)
+        print(f"New name for category {category_name} is {args.name}.")
 
     elif args.cmd == "get-name-by-id":
         row = get_name_by_id(args.model, args.model_id)
