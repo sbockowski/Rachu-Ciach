@@ -57,7 +57,7 @@ class GoalService(BaseService):
         session = self.Session()
         try:
             goal_name = get_name_by_id(Goal, deleted_row_id)
-            print("costam")
+
             confirm = input(f"Are you sure you want to delete the goal named {goal_name}? (Yes/No) :")
             
             if confirm.upper() == "YES":
