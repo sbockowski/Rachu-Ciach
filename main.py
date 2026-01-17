@@ -130,6 +130,9 @@ def main():
     parser_change_category_name.add_argument("name", type=str)
     parser_change_category_name.add_argument("category_id", type=int)
 
+    parser_delete_goal = subparsers.add_parser("delete-goal")
+    parser_delete_goal.add_argument("goal_id", type=int)
+
     args = parser.parse_args()
 
 
@@ -313,6 +316,11 @@ def main():
         category_name = get_name_by_id(Category, args.category_id)
         category_id = category_service.change_category_name(args.name, args.category_id)
         print(f"New name for category {category_name} is {args.name}.")
+
+    elif args.cmd == "delete-goal":
+        goal_service = GoalService()
+        print(args.goal_id)
+        goal_service.delete_goal(args.goal_id)
 
     elif args.cmd == "get-name-by-id":
         row = get_name_by_id(args.model, args.model_id)
