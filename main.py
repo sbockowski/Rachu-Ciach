@@ -295,7 +295,7 @@ def main():
         print(f"New name for goal {goal_name} is {args.name}.")
 
     elif args.cmd == "get-name-by-id":
-        row = get_name_by_id(args.model, args.model_id)
+        row = get_name_by_id(Budget, 2)
         print(row)
 
 if __name__ == "__main__":

@@ -38,6 +38,7 @@ class RealSpendService(BaseService):
                 "category_id": category_id, 
                 "amount": amount
             }
+
             result = update_row(
                 session=session,
                 model=RealSpend,
