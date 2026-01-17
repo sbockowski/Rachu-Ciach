@@ -106,6 +106,22 @@ def main():
     parser_update_real_spend.add_argument("amount", type=int)
     parser_update_real_spend.add_argument("updated_row_id", type=int)
 
+    parser_update_real_savings = subparsers.add_parser("update-real-savings")
+    parser_update_real_savings.add_argument("budget_id", type=int)
+    parser_update_real_savings.add_argument("goal_id", type=int)
+    parser_update_real_savings.add_argument("amount", type=int)
+    parser_update_real_savings.add_argument("updated_row_id", type=int)
+
+    parser_update_real_incomes = subparsers.add_parser("update-real-income")
+    parser_update_real_incomes.add_argument("budget_id", type=int)
+    parser_update_real_incomes.add_argument("kind_id", type=int)
+    parser_update_real_incomes.add_argument("amount", type=int)
+    parser_update_real_incomes.add_argument("updated_row_id", type=int)
+
+    parser_change_goal_name = subparsers.add_parser("change-goal-name")
+    parser_change_goal_name.add_argument("name", type=str)
+    parser_change_goal_name.add_argument("goal_id", type=int)
+
     args = parser.parse_args()
 
 
@@ -194,6 +210,22 @@ def main():
         print(f"Category: {category_name}")
         print(f"Amount: {args.amount}")
 
+    elif args.cmd == "update-real-savings":
+        real_savings_service = RealSavingsService()
+        real_savings_id = real_savings_service.update_real_savings(args.budget_id, args.goal_id, args.amount, args.updated_row_id)
+        goal_name = get_name_by_id(Goal, args.goal_id)
+        print(f"Savings id: {real_savings_id}")
+        print(f"Goal: {goal_name}")
+        print(f"Amount: {args.amount}")
+
+    elif args.cmd == "update-real-income":
+        real_income_service = RealIncomeService()
+        real_income_id = real_income_service.update_real_income(args.budget_id, args.kind_id, args.amount, args.updated_row_id)
+        kind_name = get_name_by_id(Kind, args.kind_id)
+        print(f"Income id: {real_income_id}")
+        print(f"Kind: {kind_name}")
+        print(f"Amount: {args.amount}")
+
     elif args.cmd == "add-real-income":
         real_income_service = RealIncomeService()
         real_income_id = real_income_service.add_real_income(args.budget_id, args.kind_id, args.amount)
@@ -255,6 +287,12 @@ def main():
         rows = category_service.get_category_list()
         for cid, cname in rows:
             print(f"{cid} | {cname}")
+
+    elif args.cmd == "change-goal-name":
+        goal_service = GoalService()
+        goal_name = get_name_by_id(Goal, args.goal_id)
+        goal_id = goal_service.change_goal_name(args.name, args.goal_id)
+        print(f"New name for goal {goal_name} is {args.name}.")
 
     elif args.cmd == "get-name-by-id":
         row = get_name_by_id(args.model, args.model_id)

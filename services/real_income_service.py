@@ -1,5 +1,7 @@
+from db.utils.update import update_row
 from .base_service import BaseService
 from db.models import RealIncome, Kind, Budget
+from sqlalchemy.exc import IntegrityError
 
 class RealIncomeService(BaseService):
     def add_real_income(self, budget_id: int, kind_id: int, amount: float) -> int:
@@ -25,5 +27,25 @@ class RealIncomeService(BaseService):
             )
             results = q.all()
             return results
+        finally:
+            session.close()
+
+    def update_real_income(self, budget_id: int, kind_id: int, amount: float, updated_row_id: int) -> int:
+        session = self.Session()
+        try:
+            data = {
+                "budget_id": budget_id, 
+                "kind_id": kind_id, 
+                "amount": amount
+            }
+            result = update_row(
+                session=session,
+                model=RealIncome,
+                data=data,
+                updated_row_id=updated_row_id
+            )
+            if result == True:
+                print("Update real incomes.")
+                return updated_row_id
         finally:
             session.close()
