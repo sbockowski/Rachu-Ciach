@@ -1,4 +1,3 @@
-# db/session.py
 import sqlite3
 from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
