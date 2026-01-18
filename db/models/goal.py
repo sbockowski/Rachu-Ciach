@@ -10,6 +10,6 @@ class Goal(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
 
-    savings_plans: Mapped[List["SavingsPlan"]] = relationship("SavingsPlan", back_populates="goal")
-    real_savings: Mapped[List["RealSavings"]] = relationship("RealSavings", back_populates="goal")
+    savings_plans: Mapped[List["SavingsPlan"]] = relationship("SavingsPlan", back_populates="goal", cascade="all, delete-orphan")
+    real_savings: Mapped[List["RealSavings"]] = relationship("RealSavings", back_populates="goal", cascade="all, delete-orphan")
 

@@ -10,5 +10,5 @@ class Kind(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
 
-    income_plans: Mapped[List["IncomePlan"]] = relationship("IncomePlan", back_populates="kind")
-    real_incomes: Mapped[List["RealIncome"]] = relationship("RealIncome", back_populates="kind")
+    income_plans: Mapped[List["IncomePlan"]] = relationship("IncomePlan", back_populates="kind", cascade="all, delete-orphan")
+    real_incomes: Mapped[List["RealIncome"]] = relationship("RealIncome", back_populates="kind", cascade="all, delete-orphan")

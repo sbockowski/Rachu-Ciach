@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List
-from sqlalchemy import Integer, String, Float, ForeignKey
+from sqlalchemy import Integer, String, Float, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 from .base import Base
 
@@ -15,6 +15,10 @@ class SpendPlan(Base):
 
     budget: Mapped["Budget"] = relationship("Budget", back_populates="spend_plans")
     category: Mapped["Category"] = relationship("Category", back_populates="spend_plans")
+
+    __table_args__ = (
+        UniqueConstraint("budget_id", "category_id", name="uix_spend_plan"),
+    )
 
 class RealSpend(Base):
     __tablename__ = "real_spend"
