@@ -56,23 +56,14 @@ class GoalService(BaseService):
     def delete_goal(self, deleted_row_id: int) -> int:
         session = self.Session()
         try:
-            goal_name = get_name_by_id(Goal, deleted_row_id)
-
-            confirm = input(f"Are you sure you want to delete the goal named {goal_name}? (Yes/No) :")
-            
-            if confirm.upper() == "YES":
-                result = delete_row(
-                    session=session,
-                    model=Goal,
-                    deleted_row_id=deleted_row_id,
-                )
-                if result:
-                    print(f"Goal {deleted_row_id} was deleted.")
-                    return True
-            elif confirm.upper() == "NO":
-                print(f"Goal {deleted_row_id} wasn't deleted.")
+            result = delete_row(
+                session=session,
+                model=Goal,
+                deleted_row_id=deleted_row_id,
+            )
+            if result:
+                print(f"Goal {deleted_row_id} was deleted.")
                 return True
-            else:
-                print("Please answer Yes or No.")
         finally:
             session.close()
+

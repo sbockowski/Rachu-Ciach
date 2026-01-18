@@ -10,5 +10,5 @@ class Category(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False, unique=True)
 
-    spend_plans: Mapped[List["SpendPlan"]] = relationship("SpendPlan", back_populates="category", cascade="all, delte-orphan")
-    real_spends: Mapped[List["RealSpend"]] = relationship("RealSpend", back_populates="category", cascade="all, delte-orphan")
+    spend_plans: Mapped[List["SpendPlan"]] = relationship("SpendPlan", back_populates="category", cascade="all, delete-orphan")
+    real_spends: Mapped[List["RealSpend"]] = relationship("RealSpend", back_populates="category", cascade="all, delete-orphan")
