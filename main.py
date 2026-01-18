@@ -106,11 +106,11 @@ def main():
     parser_update_real_spend.add_argument("amount", type=int)
     parser_update_real_spend.add_argument("updated_row_id", type=int)
 
-    parser_update_real_savings = subparsers.add_parser("update-real-savings")
-    parser_update_real_savings.add_argument("budget_id", type=int)
-    parser_update_real_savings.add_argument("goal_id", type=int)
-    parser_update_real_savings.add_argument("amount", type=int)
-    parser_update_real_savings.add_argument("updated_row_id", type=int)
+    parser_update_real_saving = subparsers.add_parser("update-real-saving")
+    parser_update_real_saving.add_argument("budget_id", type=int)
+    parser_update_real_saving.add_argument("goal_id", type=int)
+    parser_update_real_saving.add_argument("amount", type=int)
+    parser_update_real_saving.add_argument("updated_row_id", type=int)
 
     parser_update_real_incomes = subparsers.add_parser("update-real-income")
     parser_update_real_incomes.add_argument("budget_id", type=int)
@@ -221,9 +221,9 @@ def main():
         print(f"Category: {category_name}")
         print(f"Amount: {args.amount}")
 
-    elif args.cmd == "update-real-savings":
+    elif args.cmd == "update-real-saving":
         real_savings_service = RealSavingsService()
-        real_savings_id = real_savings_service.update_real_savings(args.budget_id, args.goal_id, args.amount, args.updated_row_id)
+        real_savings_id = real_savings_service.update_real_saving(args.budget_id, args.goal_id, args.amount, args.updated_row_id)
         goal_name = get_name_by_id(Goal, args.goal_id)
         print(f"Savings id: {real_savings_id}")
         print(f"Goal: {goal_name}")

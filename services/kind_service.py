@@ -1,4 +1,5 @@
 from db.utils.update import update_row
+from db.utils.delete import delete_row
 from .base_service import BaseService
 from db.models import Kind
 from sqlalchemy.exc import IntegrityError

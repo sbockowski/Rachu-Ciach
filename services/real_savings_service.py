@@ -1,4 +1,5 @@
 from db.utils.update import update_row
+from db.utils.delete import delete_row
 from .base_service import BaseService
 from db.models import RealSavings, Goal, Budget
 from sqlalchemy.exc import IntegrityError
@@ -30,7 +31,7 @@ class RealSavingsService(BaseService):
         finally:
             session.close()
 
-    def update_real_savings(self, budget_id: int, goal_id: int, amount: float, updated_row_id: int) -> int:
+    def update_real_saving(self, budget_id: int, goal_id: int, amount: float, updated_row_id: int) -> int:
         session = self.Session()
         try:
             data = {

@@ -1,6 +1,5 @@
 from db.utils.delete import delete_row
 from db.utils.update import update_row
-from db.utils.select import get_name_by_id
 from .base_service import BaseService
 from db.models import Goal
 from sqlalchemy.exc import IntegrityError
