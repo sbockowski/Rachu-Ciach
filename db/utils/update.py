@@ -19,6 +19,4 @@ def update_row(session: Session, model: Type[DeclarativeBase], data: Dict[str,An
     for key, value in data.items():
         setattr(record, key, value)
 
-    session.commit()
-
     return True

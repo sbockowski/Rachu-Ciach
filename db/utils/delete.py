@@ -18,5 +18,4 @@ def delete_row(session: Session, model: Type[DeclarativeBase], deleted_row_id: i
                 raise ValueError(f"Budget with id={data["budget_id"]} does not exist")
 
     session.delete(record)
-    session.commit()
     return True

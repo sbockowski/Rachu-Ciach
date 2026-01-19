@@ -13,6 +13,5 @@ def upsert(session: Session, model: Type[DeclarativeBase], data: Dict[str,Any], 
     )
 
     result = session.execute(stmt)
-    session.commit()
 
     return result

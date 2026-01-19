@@ -2,6 +2,7 @@ from typing import Type, Any, Dict
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.exc import IntegrityError
 from db.session import SessionLocal
+from db.utils.create import create_row
 from db.utils.update import update_row
 from db.utils.delete import delete_row
 from db.utils.upsert import upsert
@@ -9,6 +10,23 @@ from db.utils.upsert import upsert
 class BaseService:
     def __init__(self):
         self.Session = SessionLocal
+
+    def create(self, model: Type[DeclarativeBase], data: Dict[str,Any]) -> int:
+        session = self.Session()
+        try:
+            result = create_row(
+                session=session,
+                model=model,
+                data=data,
+            )
+            session.commit()
+            session.refresh(result)
+            return result
+        # except IntegrityError as e:
+        #     session.rollback()
+        #     raise ValueError(f"Category '{name}' already exists.") from e
+        finally:
+            session.close()
 
     def set_plan(self, model: Type[DeclarativeBase], budget_id: int, classifier_id: int, amount: float) -> int:
         session = self.Session()
@@ -29,12 +47,14 @@ class BaseService:
                 "amount": amount
             }
 
-            upsert(
+            result = upsert(
                 session=session,
                 model=model,
                 data=data,
                 conflict_columns=["budget_id", "classifier_id"]
             )
+            session.commit()
+            session.refresh(result)
 
             return "updated" if exists else "created"
 
@@ -50,12 +70,13 @@ class BaseService:
                 data=data,
                 updated_row_id=updated_row_id
             )
-            if result:
-                return updated_row_id
+            session.commit()
+            session.refresh(result)
+            return updated_row_id
         finally:
             session.close()
 
-    def rename(self, model: Type[DeclarativeBase], name: str, updated_row_id: int) -> int:
+    def rename_classifier(self, model: Type[DeclarativeBase], name: str, updated_row_id: int) -> int:
         session = self.Session()
         data = {
             "name": name,
@@ -67,10 +88,27 @@ class BaseService:
                 data=data,
                 updated_row_id=updated_row_id
             )
+            session.commit()
+            session.refresh(result)
             if result:
                 return updated_row_id
         except IntegrityError as e:
             session.rollback()
             raise ValueError(f"{model.__tablename__.capitalize()} '{name}' already exists.") from e
+        finally:
+            session.close()
+
+    def delete_goal(self, model: Type[DeclarativeBase], deleted_row_id: int) -> int:
+        session = self.Session()
+        try:
+            result = delete_row(
+                session=session,
+                model=model,
+                deleted_row_id=deleted_row_id,
+            )
+            session.commit()
+            session.refresh(result)
+            if result:
+                return True
         finally:
             session.close()
