@@ -10,8 +10,9 @@ def upsert(session: Session, model: Type[DeclarativeBase], data: Dict[str,Any], 
         .on_conflict_do_update(
             index_elements=[getattr(model, col) for col in conflict_columns], set_=data
         )
+        .returning(model.id)
     )
 
     result = session.execute(stmt)
-
-    return result
+    row_id = result.scalar_one()
+    return row_id

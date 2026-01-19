@@ -28,22 +28,24 @@ class BaseService:
         finally:
             session.close()
 
-    def set_plan(self, model: Type[DeclarativeBase], budget_id: int, classifier_id: int, amount: float) -> int:
+    def set_plan(self, model: Type[DeclarativeBase], budget_id: int, classifier_field: str, classifier_id: int, amount: float) -> int:
         session = self.Session()
         try:
+            filters = {
+                "budget_id": budget_id,
+                classifier_field: classifier_id,
+            }
+
             exists = (
                 session.query(model.id)
-                .filter_by(
-                    budget_id=budget_id,
-                    classifier_id=classifier_id,
-                )
+                .filter_by(**filters)
                 .first()
                 is not None
             )
 
             data = {
                 "budget_id": budget_id, 
-                "classifier_id": classifier_id, 
+                classifier_field: classifier_id, 
                 "amount": amount
             }
 
@@ -51,12 +53,11 @@ class BaseService:
                 session=session,
                 model=model,
                 data=data,
-                conflict_columns=["budget_id", "classifier_id"]
+                conflict_columns=["budget_id", classifier_field]
             )
             session.commit()
-            session.refresh(result)
 
-            return "updated" if exists else "created"
+            return [result, "Updated"] if exists else [result, "Created"]
 
         finally:
             session.close()
@@ -71,7 +72,6 @@ class BaseService:
                 updated_row_id=updated_row_id
             )
             session.commit()
-            session.refresh(result)
             return updated_row_id
         finally:
             session.close()
@@ -89,7 +89,6 @@ class BaseService:
                 updated_row_id=updated_row_id
             )
             session.commit()
-            session.refresh(result)
             if result:
                 return updated_row_id
         except IntegrityError as e:
@@ -98,17 +97,16 @@ class BaseService:
         finally:
             session.close()
 
-    def delete_goal(self, model: Type[DeclarativeBase], deleted_row_id: int) -> int:
+    def delete(self, model: Type[DeclarativeBase], deleted_row_id: int, data: Dict[str,Any] | None=None) -> int:
         session = self.Session()
         try:
             result = delete_row(
                 session=session,
                 model=model,
                 deleted_row_id=deleted_row_id,
+                data=data
             )
             session.commit()
-            session.refresh(result)
-            if result:
-                return True
+            return result
         finally:
             session.close()
