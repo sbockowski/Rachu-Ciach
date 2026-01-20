@@ -143,4 +143,19 @@ DISPATCHER = {
     "show_real_spends": show_table_handler(
         model=RealSpend
     ),
+    "show_real_incomes": show_table_handler(
+        model=RealIncome
+    ),
+    "show_real_savings": show_table_handler(
+        model=RealSavings
+    ),
+    "show_spends_plan": show_table_handler(
+        model=SpendPlan
+    ),
+    "show_incomes_plan": show_table_handler(
+        model=IncomePlan
+    ),
+    "show_savings_plan": show_table_handler(
+        model=SavingsPlan
+    ),
 }
