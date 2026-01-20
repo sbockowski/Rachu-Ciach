@@ -109,3 +109,14 @@ def delete_handler(model, msg_template: str, fields: list[str]):
         print(msg_template.format(id=data["deleted_row_id"]))
     return handler
 
+def show_table_handler(model):
+    def handler(*args):
+        budget_id = args[0] if args else None
+        table = service.show_table(
+            model=model,
+            budget_id=budget_id
+        )
+        for row in table:
+            print(row.id, row.name)
+    return handler
+

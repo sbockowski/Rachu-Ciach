@@ -6,6 +6,7 @@ from db.utils.create import create_row
 from db.utils.update import update_row
 from db.utils.delete import delete_row
 from db.utils.upsert import upsert
+from db.utils.select import get_table
 
 class BaseService:
     def __init__(self):
@@ -27,6 +28,19 @@ class BaseService:
         #     raise ValueError(f"Category '{name}' already exists.") from e
         finally:
             session.close()
+
+    def show_table(self, model: Type[DeclarativeBase], budget_id: int | None = None):
+        session = self.Session()
+        try:
+            result = get_table(
+                session=session,
+                model=model,
+                budget_id=budget_id
+            )
+            return result
+        finally:
+            session.close()
+
 
     def set_plan(self, model: Type[DeclarativeBase], budget_id: int, classifier_field: str, classifier_id: int, amount: float) -> int:
         session = self.Session()

@@ -14,18 +14,16 @@ def main():
         print(f"Unknown command: {cmd}")
         return
 
-    # wywołujemy handler z przekazanymi argumentami
-    DISPATCHER[cmd](*map(convert_arg, args))  # mapujemy np. int/float/str
+    DISPATCHER[cmd](*map(convert_arg, args))
 
 def convert_arg(arg):
-    # prosta heurystyka do konwersji liczb
     try:
         if '.' in arg:
             return float(arg)
         else:
             return int(arg)
     except ValueError:
-        return arg  # pozostawiamy stringi
+        return arg
 
 if __name__ == "__main__":
     main()

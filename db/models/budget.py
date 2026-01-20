@@ -29,3 +29,5 @@ class Budget(Base):
     real_savings: Mapped[List["RealSavings"]] = relationship(
         "RealSavings", back_populates="budget", cascade="all, delete-orphan"
     )
+
+    supports_budget_filter = False # possible to filter by "id", but not "budget_id"

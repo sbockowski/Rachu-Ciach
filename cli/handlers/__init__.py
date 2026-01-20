@@ -1,4 +1,4 @@
-from .crud_factory import make_update_handler, create_handler, rename_classifier_handler, set_plan_handler, delete_handler, create_budget_handler
+from .crud_factory import *
 from db.models import *
 
 DISPATCHER = {
@@ -128,4 +128,7 @@ DISPATCHER = {
         msg_template="Deleted savings plan with ID {id}",
         fields=["budget_id", "deleted_row_id"]
     ),
+    "show_goals": show_table_handler(
+        model=Goal
+    )
 }
