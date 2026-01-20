@@ -1,5 +1,7 @@
+from tabulate import tabulate
 from db.models import Budget
 from db.services.base_service import BaseService
+from db.utils.orm import row_to_dict
 from datetime import datetime
 
 service = BaseService()
@@ -116,7 +118,7 @@ def show_table_handler(model):
             model=model,
             budget_id=budget_id
         )
-        for row in table:
-            print(row.id, row.name)
+        rows = [row_to_dict(r) for r in table]
+        print(tabulate(rows, headers="keys", tablefmt="github"))
     return handler
 

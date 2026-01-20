@@ -18,19 +18,19 @@ DISPATCHER = {
         msg_template="Created kind with name {data[name]}",
         fields=["name"]
     ),
-    "create_real_savings": create_handler(
+    "add_real_savings": create_handler(
         model=RealSavings,
-        msg_template="Created real savings with ID {id}",
+        msg_template="Added real savings with ID {id}",
         fields=["budget_id", "goal_id", "amount"]
     ),
-    "create_real_spends": create_handler(
+    "add_real_spends": create_handler(
         model=RealSpend,
-        msg_template="Created real spend with ID {id}",
+        msg_template="Added real spend with ID {id}",
         fields=["budget_id", "category_id", "amount"]
     ),
-    "create_real_incomes": create_handler(
+    "add_real_incomes": create_handler(
         model=RealIncome,
-        msg_template="Created real income with ID {id}",
+        msg_template="Added real income with ID {id}",
         fields=["budget_id", "kind_id", "amount"]
     ),
     "update_real_savings": make_update_handler(
@@ -128,7 +128,19 @@ DISPATCHER = {
         msg_template="Deleted savings plan with ID {id}",
         fields=["budget_id", "deleted_row_id"]
     ),
+    "show_budgets": show_table_handler(
+        model=Budget
+    ),
     "show_goals": show_table_handler(
         model=Goal
-    )
+    ),
+    "show_categories": show_table_handler(
+        model=Category
+    ),
+    "show_kinds": show_table_handler(
+        model=Kind
+    ),
+    "show_real_spends": show_table_handler(
+        model=RealSpend
+    ),
 }
