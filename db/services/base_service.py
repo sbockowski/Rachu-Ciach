@@ -29,13 +29,14 @@ class BaseService:
         finally:
             session.close()
 
-    def show_table(self, model: Type[DeclarativeBase], budget_id: int | None = None):
+    def show_table(self, model: Type[DeclarativeBase], budget_id: int | None = None, joins=None):
         session = self.Session()
         try:
             result = get_table(
                 session=session,
                 model=model,
-                budget_id=budget_id
+                budget_id=budget_id,
+                joins=joins
             )
             return result
         finally:

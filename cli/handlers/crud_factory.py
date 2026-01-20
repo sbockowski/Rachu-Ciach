@@ -111,14 +111,25 @@ def delete_handler(model, msg_template: str, fields: list[str]):
         print(msg_template.format(id=data["deleted_row_id"]))
     return handler
 
-def show_table_handler(model):
+def show_table_handler(model, joins=None):
     def handler(*args):
         budget_id = args[0] if args else None
         table = service.show_table(
             model=model,
-            budget_id=budget_id
+            budget_id=budget_id,
+            joins=joins
         )
-        rows = [row_to_dict(r) for r in table]
+        # rows = [row_to_dict(r) for r in table]
+        rows = []
+        for row in table:
+            data = row_to_dict(row)
+            if joins:
+                for rel_name in joins:
+                    rel_obj = getattr(row, rel_name.key)
+                    if rel_obj is not None:
+                        # dodajemy klucz relacji z "_name" lub innym formatem
+                        data[f"{rel_name}_name"] = getattr(rel_obj, "name", str(rel_obj))
+            rows.append(data)
         print(tabulate(rows, headers="keys", tablefmt="github"))
     return handler
 

@@ -141,21 +141,27 @@ DISPATCHER = {
         model=Kind
     ),
     "show_real_spends": show_table_handler(
-        model=RealSpend
+        model=RealSpend,
+        joins=[RealSpend.budget, RealSpend.category]
     ),
     "show_real_incomes": show_table_handler(
-        model=RealIncome
+        model=RealIncome,
+        joins=[RealIncome.budget, RealIncome.kind]
     ),
     "show_real_savings": show_table_handler(
-        model=RealSavings
+        model=RealSavings,
+        joins=[RealSavings.budget, RealSavings.goal]
     ),
     "show_spends_plan": show_table_handler(
-        model=SpendPlan
+        model=SpendPlan,
+        joins=[SpendPlan.budget, SpendPlan.category]
     ),
     "show_incomes_plan": show_table_handler(
-        model=IncomePlan
+        model=IncomePlan,
+        joins=[IncomePlan.budget, IncomePlan.kind]
     ),
     "show_savings_plan": show_table_handler(
-        model=SavingsPlan
+        model=SavingsPlan,
+        joins=[SavingsPlan.budget, SavingsPlan.goal]
     ),
 }

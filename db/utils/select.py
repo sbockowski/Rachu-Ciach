@@ -2,16 +2,21 @@ from typing import Type
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import joinedload
 
-def get_table(session: Session, model: Type[DeclarativeBase], budget_id: int | None = None):
+def get_table(session: Session, model: Type[DeclarativeBase], budget_id: int | None = None, joins: list | None = None):
+    stmt = select(model)
     if budget_id is not None:
         if not getattr(model, "supports_budget_filter", False):
             raise ValueError(
                 f"Model '{model.__name__}' does not support filtering by budget_id"
             )
-        stmt = select(model).where(model.budget_id == budget_id)
-    else:
-        stmt = select(model)
+        stmt = stmt.where(model.budget_id == budget_id)
+    
+    if joins:
+        for relation in joins:
+            stmt  = stmt.options(joinedload(relation))
+
     return session.scalars(stmt).all()
 
 def get_name_by_id(session: Session, model: Type[DeclarativeBase], model_id):
