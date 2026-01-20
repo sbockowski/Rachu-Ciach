@@ -13,3 +13,4 @@ class Goal(Base):
     savings_plans: Mapped[List["SavingsPlan"]] = relationship("SavingsPlan", back_populates="goal", cascade="all, delete-orphan")
     real_savings: Mapped[List["RealSavings"]] = relationship("RealSavings", back_populates="goal", cascade="all, delete-orphan")
 
+    supports_budget_filter = False # possible to filter by "id", but not "budget_id"

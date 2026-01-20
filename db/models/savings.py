@@ -15,6 +15,8 @@ class SavingsPlan(Base):
     budget: Mapped["Budget"] = relationship("Budget")
     goal: Mapped["Goal"] = relationship("Goal", back_populates="savings_plans")
 
+    supports_budget_filter = True # possible to filter by "budget_id"
+
     __table_args__ = (
         UniqueConstraint("budget_id", "goal_id", name="uix_savings_plan"),
     )
@@ -29,5 +31,7 @@ class RealSavings(Base):
 
     budget: Mapped["Budget"] = relationship("Budget")
     goal: Mapped["Goal"] = relationship("Goal", back_populates="real_savings")
+
+    supports_budget_filter = True # possible to filter by "budget_id"
 
 

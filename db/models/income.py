@@ -15,6 +15,8 @@ class IncomePlan(Base):
     budget: Mapped["Budget"] = relationship("Budget", back_populates="income_plans")
     kind: Mapped["Kind"] = relationship("Kind", back_populates="income_plans")
 
+    supports_budget_filter = True # possible to filter by "budget_id"
+
     __table_args__ = (
         UniqueConstraint("budget_id", "kind_id", name="uix_income_plan"),
     )
@@ -29,3 +31,5 @@ class RealIncome(Base):
 
     budget: Mapped["Budget"] = relationship("Budget", back_populates="real_incomes")
     kind: Mapped["Kind"] = relationship("Kind", back_populates="real_incomes")
+
+    supports_budget_filter = True # possible to filter by "budget_id"

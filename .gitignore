@@ -9,5 +9,7 @@ __pycache__/
 rachu-ciach.db
 db/rachu-ciach.db
 
+main_2.py
+
 # lock files
 # uv.lock

@@ -12,3 +12,5 @@ class Kind(Base):
 
     income_plans: Mapped[List["IncomePlan"]] = relationship("IncomePlan", back_populates="kind", cascade="all, delete-orphan")
     real_incomes: Mapped[List["RealIncome"]] = relationship("RealIncome", back_populates="kind", cascade="all, delete-orphan")
+
+    supports_budget_filter = False # possible to filter by "id", but not "budget_id"
