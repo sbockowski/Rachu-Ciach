@@ -2,6 +2,7 @@ from typing import Any, Dict, Type
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm.decl_api import DeclarativeAttributeIntercept
 
 from db.session import SessionLocal
 from db.utils.create import create_row
@@ -53,7 +54,7 @@ class BaseService:
         classifier_field: str,
         classifier_id: int,
         amount: float,
-    ) -> int:
+    ):
         session = self.Session()
         try:
             filters = {
@@ -87,7 +88,7 @@ class BaseService:
     ) -> int:
         session = self.Session()
         try:
-            result = update_row(
+            update_row(
                 session=session, model=model, data=data, updated_row_id=updated_row_id
             )
             session.commit()
@@ -97,7 +98,7 @@ class BaseService:
 
     def rename_classifier(
         self, model: Type[DeclarativeBase], name: str, updated_row_id: int
-    ) -> int:
+    ):
         session = self.Session()
         data = {
             "name": name,
@@ -122,7 +123,7 @@ class BaseService:
         model: Type[DeclarativeBase],
         deleted_row_id: int,
         data: Dict[str, Any] | None = None,
-    ) -> int:
+    ) -> DeclarativeBase:
         session = self.Session()
         try:
             result = delete_row(
